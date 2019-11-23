@@ -26,9 +26,30 @@ class AuthService {
   }
 
   // sign in with email & password
-  Future signInEmailPassword() {}
+  Future signInWithEmailAndPassword(String email, String password) async {
+    try {
+      AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+     FirebaseUser user = result.user; 
+     return _userFromFirebaseUser(user);
+    }
+    catch(err) {
+      print('sign in error: $err');
+      return null;
+    }
+  }
 
   //register with email & password
+  Future registerWithEmailAndPassword(String email, String password) async {
+    try {
+      AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+     FirebaseUser user = result.user; 
+     return _userFromFirebaseUser(user);
+    }
+    catch(err) {
+      print('register error: $err');
+      return null;
+    }
+  }
 
   // sign out
   Future signOut () async {

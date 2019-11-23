@@ -2,15 +2,17 @@ import 'package:cafe_nook/services/auth.dart';
 import 'package:cafe_nook/shared/constants.dart';
 import 'package:flutter/material.dart';
 
-class SignIn extends StatefulWidget {
+class Register extends StatefulWidget {
+
   final Function toggleView;
-  SignIn({this.toggleView});
+  Register({this.toggleView});
 
   @override
-  _SignInState createState() => _SignInState();
+  _RegisterState createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
+class _RegisterState extends State<Register> {
+
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
@@ -26,11 +28,11 @@ class _SignInState extends State<SignIn> {
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
-        title: Text('Sign in to Cafe Nook'),
+        title: Text('Register to Cafe Nook'),
         actions: <Widget>[
           FlatButton.icon(
             icon: Icon(Icons.person),
-            label: Text('Register'),
+            label: Text('Signin'),
             onPressed: () {
               widget.toggleView();
             },
@@ -60,8 +62,7 @@ class _SignInState extends State<SignIn> {
               ),
               TextFormField(
                 decoration: textINputDecoration.copyWith(hintText: 'Password'),
-                validator: (val) =>
-                    val.length < 6 ? 'Enter a password 6+ chars long' : null,
+                validator: (val) => val.length < 6 ? 'Enter a password 6+ chars long' : null,
                 obscureText: true,
                 onChanged: (val) {
                   setState(() {
@@ -75,28 +76,28 @@ class _SignInState extends State<SignIn> {
               RaisedButton(
                 color: Colors.pink[400],
                 child: Text(
-                  'Sign in',
+                  'Regiser',
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
-                    dynamic result = await _auth.signInWithEmailAndPassword(
-                        email, password);
+                    dynamic result = await _auth.registerWithEmailAndPassword(email, password);
                     print(result);
-                    if (result == null) {
+                    if(result == null) {
                       setState(() {
-                        error = 'cloud not sign in with those credentials';
+                        error = 'please supply a valid email';
                       });
                     }
                   }
                 },
               ),
-              SizedBox(
-                height: 12.0,
-              ),
+              SizedBox(height: 12.0,),
               Text(
                 error,
-                style: TextStyle(color: Colors.red, fontSize: 14.0),
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 14.0
+                ),
               )
             ],
           ),
