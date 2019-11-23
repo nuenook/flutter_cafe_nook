@@ -1,4 +1,5 @@
 import 'package:cafe_nook/models/user.dart';
+import 'package:cafe_nook/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
@@ -42,8 +43,10 @@ class AuthService {
   Future registerWithEmailAndPassword(String email, String password) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-     FirebaseUser user = result.user; 
-     return _userFromFirebaseUser(user);
+      FirebaseUser user = result.user; 
+
+      await DatabaseService(uid: user.uid).updateUserData('', 'new crew member', 100);
+      return _userFromFirebaseUser(user);
     }
     catch(err) {
       print('register error: $err');

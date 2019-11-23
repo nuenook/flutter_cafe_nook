@@ -1,5 +1,6 @@
 import 'package:cafe_nook/services/auth.dart';
 import 'package:cafe_nook/shared/constants.dart';
+import 'package:cafe_nook/shared/loading.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
@@ -15,6 +16,7 @@ class _RegisterState extends State<Register> {
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  bool loading = false;
 
   // text field state
   String email = '';
@@ -23,7 +25,7 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
@@ -81,11 +83,15 @@ class _RegisterState extends State<Register> {
                 ),
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
+                    setState(() {
+                      loading = true;
+                    });
                     dynamic result = await _auth.registerWithEmailAndPassword(email, password);
                     print(result);
                     if(result == null) {
                       setState(() {
                         error = 'please supply a valid email';
+                        loading = false;
                       });
                     }
                   }

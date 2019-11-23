@@ -1,5 +1,6 @@
 import 'package:cafe_nook/services/auth.dart';
 import 'package:cafe_nook/shared/constants.dart';
+import 'package:cafe_nook/shared/loading.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
@@ -13,6 +14,7 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  bool loading = false;
 
   // text field state
   String email = '';
@@ -21,7 +23,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
@@ -80,12 +82,14 @@ class _SignInState extends State<SignIn> {
                 ),
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
+                    setState(() => loading = true);
                     dynamic result = await _auth.signInWithEmailAndPassword(
                         email, password);
                     print(result);
                     if (result == null) {
                       setState(() {
                         error = 'cloud not sign in with those credentials';
+                        loading = false;
                       });
                     }
                   }
