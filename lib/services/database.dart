@@ -16,7 +16,7 @@ DatabaseService({this.uid});
       'name': name,
       'strength': strength
     });
-  } 
+  }
 
   List<Brew> _brewListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {

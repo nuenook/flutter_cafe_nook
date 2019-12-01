@@ -56,7 +56,7 @@ class AuthService {
 
   // sign out
   Future signOut () async {
-    try { 
+    try {
       return await _auth.signOut();
     } catch(err) {
       print('sign out error: $err');
